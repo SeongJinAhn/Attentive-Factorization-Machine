@@ -3,8 +3,8 @@
 Paper by
 Jun Xiao, Hao Ye, Xiangnan He, Hanwang Zhang, Fei Wu and Tat-Seng Chua (2017). [Attentional Factorization Machines: Learning the Weight of Feature Interactions via Attention Networks](http://www.comp.nus.edu.sg/~xiangnan/papers/ijcai17-afm.pdf) IJCAI, Melbourne, Australia, August 19-25, 2017.
 
-Authors implemented as Tensorflow.
-So I implemented it as Pytorch.
+Authors implemented with Tensorflow, and there are no codes that are implemented with Pytorch.
+So I implemented it with Pytorch.
 
 There will be lot of mistakes.
 
