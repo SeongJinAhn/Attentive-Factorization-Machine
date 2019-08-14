@@ -12,21 +12,22 @@ class afm(nn.Module):
             self.ToTensor = torch.cuda.LongTensor
             self.device = torch.device('cuda')
     
-        self.person_embed = nn.Embedding(num_user*3,config.embedding_dim)
+        self.person_embed = nn.Embedding(num_user+1,config.embedding_dim)
         self.prediction = nn.Linear(config.embedding_dim,1)
         self.attention= Attention(config.embedding_dim)
 
         self.p = nn.Parameter(torch.rand(1,config.embedding_dim))
+        self.first = nn.Embedding(num_user,1)
         self.gen_bias = nn.Parameter(torch.rand(1))
 
     def forward(self,group,config):
         first = self.FirstOrder(group,config)
         second = self.AttentiveSecond(group,config)
-        return self.gen_bias + first + second
+        asd = nn.Sigmoid()(first+second)*2-1
+        return asd
 
     def FirstOrder(self,group,config):
-        
-        return 0
+        return torch.sum(self.first(group),dim=1).reshape(-1)
 
     def AttentiveSecond(self,group,config):
         gr_len = len(group)
@@ -69,9 +70,8 @@ class afm(nn.Module):
 class Attention(nn.Module):
     def __init__(self, embedding_dim, drop_ratio=0):
         super(Attention, self).__init__()
-        self.L1 = nn.Linear(embedding_dim,200)
-        self.L2 = nn.Linear(200,30)
-        self.L3 = nn.Linear(30,1)
+        self.L1 = nn.Linear(embedding_dim,30)
+        self.L2 = nn.Linear(30,1)
 
 
     def forward(self, x):
@@ -79,5 +79,4 @@ class Attention(nn.Module):
         out = nn.Sigmoid()(out)
         out = self.L2(out)
         out = nn.Sigmoid()(out)
-        out = self.L3(out)
         return out
